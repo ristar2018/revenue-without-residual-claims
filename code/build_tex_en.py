@@ -494,7 +494,7 @@ def main():
     doc = [PREAMBLE, front_matter(), inline(abstract.replace("\n", " ")), KEYWORDS,
            "\n\n".join(body), "\\FloatBarrier", back_matter(),
            "\\section*{References}", refs,
-           "\\clearpage\n\\section*{Appendix A. Supplementary table}", tab_a2,
+           "\\clearpage\n\\section*{Appendix A. Supplementary tables}", tab_a2,
            "\\end{document}\n"]
     tex = "\n\n".join(doc)
     io.open(os.path.join(OUT, "manuscript.tex"), "w", encoding="utf-8", newline="\n").write(tex)
