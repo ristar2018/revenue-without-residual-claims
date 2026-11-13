@@ -1,0 +1,20 @@
+﻿check,value,n,note
+identity_residual_max_abs,2.6645352591003757e-15,165,net_margin - (adj_margin - four burdens)
+identity_residual_gt_1e-9,0.0,165,应为 0
+gap_on_four_R2,1.0,165,≈1 表示恒等式，不能作解释性证据
+corr_gap_minority,-0.0115,165,Pearson
+corr_gap_int_burden,-0.9532,165,Pearson
+corr_gap_impair,-0.9674,165,Pearson
+corr_gap_da_int,-0.2759,165,Pearson
+vif_da_int,1.55,115,raw regressors
+vif_int_burden,1.856,115,raw regressors
+vif_impair,1.289,115,raw regressors
+corr_da_int_da_int,1.0,115,Pearson
+corr_da_int_int_burden,0.5955,115,Pearson
+corr_da_int_impair,0.2659,115,Pearson
+corr_int_burden_da_int,0.5955,115,Pearson
+corr_int_burden_int_burden,1.0,115,Pearson
+corr_int_burden_impair,0.4731,115,Pearson
+corr_impair_da_int,0.2659,115,Pearson
+corr_impair_int_burden,0.4731,115,Pearson
+corr_impair_impair,1.0,115,Pearson

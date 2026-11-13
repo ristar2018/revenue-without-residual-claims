@@ -1,0 +1,3 @@
+﻿spec,n,firms,r2,da_int,da_int_se,da_int_p,int_burden,int_burden_se,int_burden_p,impair,impair_se,impair_p
+baseline_drop_missing,115,17,0.6455,1.3179,0.4957,0.0078,-3.7716,1.9009,0.0472,-1.4132,0.6468,0.0289
+impute_T1_T2_zero,132,17,0.5076,0.758,0.5267,0.1501,-3.5042,1.3446,0.0092,-1.0485,0.3958,0.0081

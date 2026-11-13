@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this package, please cite the article below."
+title: "Revenue without residual claims: contract boundaries, reporting boundaries and the separation of revenue growth from parent-attributable profit in Chinese tourism listed firms"
+authors:
+  - family-names: "Hu"
+    given-names: "Mengjie"
+    email: "hmj@hist.edu.cn"
+year: 2026
+license: MIT
+type: software
+repository-code: "https://github.com/ristar2018/revenue-without-residual-claims"
+keywords:
+  - tourism
+  - value capture
+  - concession contracts
+  - revenue recognition
+  - China
