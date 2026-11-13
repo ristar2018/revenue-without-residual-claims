@@ -147,7 +147,7 @@
 
 *Panel A. Fields recorded in `data/contract_terms_v4.csv` (99 rows).*
 
-| Column | Definition | Values or form |
+| Panel A — column | Definition | Values or form |
 |---|---|---|
 | code | Six-digit exchange code of the disclosing listed firm | 7 codes |
 | year | Reporting year | 2016-2024 |
@@ -170,14 +170,14 @@
 
 *Panel B. Analytic codes read from the verbatim fields.* These are readings of `pricing` and `end_date` rather than separate columns, so that the recorded text and the code can always be checked against each other.
 
-| Code | Read from | Rule | Values |
+| Panel B — code | Read from | Rule | Values |
 |---|---|---|---|
 | Fee basis class | pricing | fixed sum; cost-based; revenue- or profit-sharing formula; stepwise or progressive schedule; not disclosed | 5 classes |
 | Sharing | pricing | yes when the fee is a stated function of the counterparty's revenue or profit, no otherwise | yes; no |
 | Termination disclosed | end_date | yes when an end date is stated, no otherwise | yes; no |
 | Agreement | counterparty + scope + start_date | entries sharing all three are treated as one agreement | 39 agreements from 99 entries |
 
-*Notes.* Chinese values are retained in the data files because they are the wording of the source notes; the replication package README lists their English equivalents, and the values printed in Panel A are those equivalents. Each clause was read in the original report. Ambiguities were resolved by re-reading the full contract description and the surrounding note rather than by interpreting an isolated table entry. Coding was carried out by a single coder, so no inter-coder reliability statistic is available; the manual is reported here so that the classification can be reproduced or challenged. A fee basis recorded as not disclosed means that the note states the existence of an arrangement without stating how the fee is calculated.
+*Notes.* Chinese values are retained in the data files because they are the wording of the source notes; the replication package README lists their English equivalents, and the values printed in the table are those equivalents. Panel A lists the recorded fields; Panel B lists the codes read from them for Tables 3 and 5 and Figure 5. Each clause was read in the original report. Ambiguities were resolved by re-reading the full contract description and the surrounding note rather than by interpreting an isolated table entry. Coding was carried out by a single coder, so no inter-coder reliability statistic is available; the manual is reported here so that the classification can be reproduced or challenged. A fee basis recorded as not disclosed means that the note states the existence of an arrangement without stating how the fee is calculated.
 
 ## Appendix Table A4
 
