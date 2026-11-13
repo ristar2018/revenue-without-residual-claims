@@ -4,20 +4,38 @@ Unit of analysis: one disclosure entry for one counterparty and one subject in
 one report. Agreement-level records aggregate entries that name the same
 counterparty, subject and start date.
 
-| Field | Definition | Values |
+*Panel A. Recorded fields (`data/contract_terms_v4.csv`, 99 rows).*
+
+| Column | Definition | Values or form |
 |---|---|---|
-| `code` | Six-digit exchange code of the disclosing listed firm | 24 codes |
-| `year` | Reporting year | 2015-2024 |
-| `kind` | Reporting period | `A` annual, `H1` semi-annual |
-| `channel` | Location of the clause | `附注表` notes table, `关联交易正文` related-party main text |
-| `counterparty` | Principal granting the revenue right | government, scenic-area authority, state platform, other |
-| `operator` | Entity receiving the fee | listed firm or subsidiary |
-| `scope` | Subject of the arrangement | scenic area, hotel, travel agency, port, other asset, equity |
-| `pricing` | Basis of the fee | fixed, cost-based, revenue-based, stepwise, progressive, not disclosed |
-| `amount_yuan` | Fee recognised in the period | RMB |
-| `start_date`, `end_date` | Term as disclosed | ISO dates |
-| `pct_same_type` | Fee divided by the revenue of the same subject type | percent |
-| `note` | Verbatim or condensed clause text | free text |
+| `code` | Six-digit exchange code of the disclosing listed firm | 7 codes |
+| `year` | Reporting year | 2016-2024 |
+| `kind` | Report type | `A` annual (78 rows), `H1` semi-annual (21 rows) |
+| `page` | Page of the entry in the layout text | integer |
+| `rec` | Order of the entry within that page | 1-5 |
+| `channel` | Location of the clause | `附注表` notes table (94), `关联交易正文` related-party main text (5) |
+| `counterparty` | Principal granting the revenue right | firm name, verbatim as disclosed |
+| `operator` | Entity receiving the fee | firm name, verbatim; the disclosing firm itself is kept as disclosed (`本公司`) |
+| `scope` | Subject of the arrangement, standardised | `经营管理权托管` (33), `饭店` (26), `其他资产托管` (21), `旅行社` (13), `股权托管` (1), named scenic area (5) |
+| `scope_raw` | Subject as worded in the report | verbatim |
+| `start_date`, `end_date` | Term as disclosed | ISO dates; `end_date` empty when no end date is disclosed (41 of 99) |
+| `pricing` | Basis of the fee | verbatim excerpt |
+| `amount_yuan` | Fee recognised in the period | RMB, numeric |
+| `nature` | Sector of the subject | `景区` (5), `酒店` (26), `旅行社` (13), `港口` (1), `其他` (54) |
+| `pct_same_type` | Share of same-type transactions as stated in the report | percent; stated for 5 of 99 |
+| `parse_flag` | Cleaning applied during extraction | free text |
+| `note` | Coder note | free text |
+
+*Panel B. Analytic codes read from the verbatim fields.* These are readings of
+`pricing` and `end_date` rather than separate columns, so that the recorded text
+and the code can always be checked against each other.
+
+| Code | Read from | Rule | Values |
+|---|---|---|---|
+| Fee basis class | `pricing` | fixed sum; cost-based; revenue- or profit-sharing formula; stepwise or progressive schedule; not disclosed | 5 classes |
+| Sharing | `pricing` | yes when the fee is a stated function of the counterparty's revenue or profit, no otherwise | yes / no |
+| Termination disclosed | `end_date` | yes when an end date is stated, no otherwise | yes / no |
+| Agreement | `counterparty` + `scope` + `start_date` | entries sharing all three are one agreement | 39 agreements from 99 entries |
 
 ## Decision rules
 
@@ -28,9 +46,12 @@ counterparty, subject and start date.
 3. Where the notes table and the related-party main text describe the same
    agreement, the entry is kept once and `channel` records where the
    economically relevant terms appear.
-4. Fee-to-revenue ratios use the revenue of the same subject type as the
-   denominator. Where the denominator is not reported, the ratio is left empty
-   rather than imputed.
+4. Fee-to-revenue ratios divide the fee by the operating revenue of the same
+   firm-year from `panel_annual_2015_2025_v2.csv`; they are not ratios to the
+   revenue of the subject type. `pct_same_type` is a different quantity: the
+   share of same-type transactions as stated in the report, available for five
+   entries. A ratio is left empty when the denominator is missing rather than
+   imputed.
 5. Termination dates are recorded as disclosed. A clause without a stated end
    date is coded as open-ended, not as perpetual.
 6. Coding was performed by reading the original reports. Ambiguous cases were
@@ -49,9 +70,11 @@ without Chinese.
 | `channel` | 附注表 | notes table (related-party section of the notes) |
 | | 关联交易正文 | related-party main text (material-contracts narrative) |
 | `nature` | 景区 / 酒店 / 旅行社 / 港口 / 其他 | scenic area / hotel / travel agency / port / other |
-| `scope` (coded categories) | 经营管理权托管 | entrusted operating and management rights |
-| | 其他资产托管 | other assets entrusted for management |
-| | 股权托管 | entrusted equity |
+| `scope` (coded categories) | 经营管理权托管 | operating-rights entrustment |
+| | 饭店 | hotel property |
+| | 其他资产托管 | other asset entrustment |
+| | 旅行社 | travel agency |
+| | 股权托管 | equity entrustment |
 | `class_main`, `top_class` | T1_制度性不适用 | institutionally not applicable: the standard was not yet in force |
 | | T2_结构性零 | structural zero: the firm has no such item |
 | | T3_未单独列示 | not presented separately on the face of the statement |

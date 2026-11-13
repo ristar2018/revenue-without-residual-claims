@@ -188,7 +188,7 @@ A descriptive adjusted margin adds interest expense, impairment loss, and deprec
 
 The contract corpus contains 99 clauses extracted from 32 reports issued by 7 firms over 2016--2024: 25 annual reports and 7 semi-annual reports. Of these clauses, 39 are agreement-level. Two disclosure channels are distinguished. The notes table on entrusted management and contracting supplies 94 clauses, while the main-text section on other material contracts supplies 5. The notes table contains no scenic-area clauses; all five scenic-area clauses occur in the main text. A search confined to the notes table would therefore omit the scenic-area evidence present in this corpus.
 
-Each clause is coded for firm, year, report type, disclosure channel, counterparty, subject, fee basis, fee amount, fee-to-revenue ratio, sharing schedule, term, termination, and collection status; Appendix Table A3 reports the coding manual, Appendix Table A4 the search and screening yield, and Appendix Table A5 the clause inventory by firm. Subject categories are scenic area, hotel, travel agency, port, and other. Fee bases are fixed, cost-based, revenue-sharing, and stepwise. Clauses were read in the original reports. Ambiguities were addressed by re-reading the full contract description and the surrounding note rather than interpreting an isolated table entry. No inter-coder reliability statistic is available.
+Each clause is coded for firm, year, report type, page and entry position, disclosure channel, counterparty, operator, subject, fee basis, fee amount and term, together with the share of same-type transactions where the report states it. Sharing schedules and the presence of an end date are read from the fee-basis text and the disclosed term rather than stored as separate fields. Appendix Table A3 reports the recorded fields and these reading rules, Appendix Table A4 the search and screening yield, and Appendix Table A5 the clause inventory by firm. Subject categories are scenic area, hotel, travel agency, port, and other. Fee bases are fixed, cost-based, revenue-sharing, and stepwise. Clauses were read in the original reports. Ambiguities were addressed by re-reading the full contract description and the surrounding note rather than interpreting an isolated table entry. No inter-coder reliability statistic is available.
 
 Within the notes table, 54 clauses concern other subjects, including 50 in annual reports; 26 concern hotels, including 18 in annual reports; and 13 concern travel agencies, including 9 in annual reports. The remaining clause concerns a port. These are clause frequencies, not counts of distinct firms, assets, or economically independent agreements. The 39 agreement-level clauses must likewise be distinguished from the full set of disclosure entries.
 
@@ -555,7 +555,7 @@ The authors declare that they have no known competing financial interests or per
 
 \section*{Data availability}
 
-The firm-level panel is constructed from public annual and semi-annual reports. Derived variables, contract-coding records and estimation scripts are openly available in the replication repository at \url{https://github.com/ristar2018/revenue-without-residual-claims}, which maps every derived file to the script that produces it (Appendix Table A9). The source reports themselves remain subject to their publishers' terms of use. The contract corpus is limited to publicly disclosed clauses.
+The firm-level panel is constructed from public annual and semi-annual reports. Derived variables, contract-coding records and estimation scripts are openly available in the replication repository at https://github.com/ristar2018/revenue-without-residual-claims, which maps every derived file to the script that produces it (Appendix Table A9). The source reports themselves remain subject to their publishers' terms of use. The contract corpus is limited to publicly disclosed clauses.
 
 
 \section*{References}
@@ -708,27 +708,45 @@ Depreciation and amortisation intensity & 13.90 & 23.76 & +9.86 \\
 \begin{adjustbox}{max width=\textwidth}
 \begin{tabular}{@{}lll@{}}
 \toprule
-Field & Definition & Values \\
+Column & Definition & Values or form \\
 \midrule
-Record & One disclosure entry for one counterparty and one subject in one report & --- \\
-Firm & Six-digit exchange code of the disclosing listed firm & 24 codes \\
-Report & Reporting year and reporting period & annual; semi-annual \\
-Channel & Location of the clause in the report & notes table; related-party main text \\
-Counterparty & Principal that grants the revenue right & government; scenic-area authority; state platform; other \\
-Operator & Entity that receives the fee & listed firm; subsidiary \\
-Subject & Object of the arrangement & scenic area; hotel; travel agency; port; other asset; equity \\
-Fee basis & How the fee is determined & fixed; cost-based; revenue-based; stepwise; progressive; not disclosed \\
-Fee amount & Amount recognised in the reporting period, RMB & numeric \\
-Term & Disclosed start and end dates, and length in years & date; years \\
-Termination & Whether an end date is disclosed & yes; no \\
-Sharing & Whether the fee is linked to revenue or profit by a formula & yes; no \\
-Agreement & Record joining entries that share counterparty, subject and start date & --- \\
+code & Six-digit exchange code of the disclosing listed firm & 7 codes \\
+year & Reporting year & 2016-2024 \\
+kind & Report type & A (annual, 78 rows); H1 (semi-annual, 21 rows) \\
+page & Page on which the entry appears in the layout text & integer \\
+rec & Order of the entry within that page & 1-5 \\
+channel & Location of the clause in the report & notes table (94); related-party main text (5) \\
+counterparty & Principal that grants the revenue right & firm name, verbatim as disclosed \\
+operator & Entity that receives the fee & firm name, verbatim; entries naming the disclosing firm itself are kept as disclosed \\
+scope & Subject of the arrangement, standardised & operating-rights entrustment (33); hotel property (26); other asset entrustment (21); travel agency (13); equity entrustment (1); named scenic area (5) \\
+scope\_raw & Subject as worded in the report & verbatim \\
+start\_date & Start of the term as disclosed & YYYY-MM-DD \\
+end\_date & End of the term as disclosed & YYYY-MM-DD; empty in 41 of 99 rows, meaning no end date is disclosed \\
+pricing & Fee basis as worded in the report & verbatim excerpt \\
+amount\_yuan & Fee recognised in the reporting period, RMB & numeric \\
+nature & Sector of the subject & other (54); hotel (26); travel agency (13); scenic area (5); port (1) \\
+pct\_same\_type & Share of same-type transactions, where the report states it & percent; stated for 5 of 99 rows \\
+parse\_flag & Record of any cleaning applied during extraction & free text \\
+note & Coder note & free text \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\par\medskip
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Code & Read from & Rule & Values \\
+\midrule
+Fee basis class & pricing & fixed sum; cost-based; revenue- or profit-sharing formula; stepwise or progressive schedule; not disclosed & 5 classes \\
+Sharing & pricing & yes when the fee is a stated function of the counterparty's revenue or profit, no otherwise & yes; no \\
+Termination disclosed & end\_date & yes when an end date is stated, no otherwise & yes; no \\
+Agreement & counterparty + scope + start\_date & entries sharing all three are treated as one agreement & 39 agreements from 99 entries \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}
 \par\medskip
 \raggedright
-\noindent\textit{Notes.} Each clause was read in the original report. Ambiguities were resolved by re-reading the full contract description and the surrounding note rather than by interpreting an isolated table entry. Coding was carried out by a single coder, so no inter-coder reliability statistic is available; the coding manual is reported here so that the classification can be reproduced or challenged. A fee basis recorded as not disclosed means that the note states the existence of an arrangement without stating how the fee is calculated.
+\noindent\textit{Notes.} Chinese values are retained in the data files because they are the wording of the source notes; the replication package README lists their English equivalents, and the values printed in Panel A are those equivalents. Each clause was read in the original report. Ambiguities were resolved by re-reading the full contract description and the surrounding note rather than by interpreting an isolated table entry. Coding was carried out by a single coder, so no inter-coder reliability statistic is available; the manual is reported here so that the classification can be reproduced or challenged. A fee basis recorded as not disclosed means that the note states the existence of an arrangement without stating how the fee is calculated.
 \end{minipage}
 \end{table}
 
@@ -751,7 +769,7 @@ Page-level keyword hits & 1,180 & entrusted management, management fee, sharing,
 Clause entries extracted & 99 & 94 notes-table entries and 5 related-party main-text entries \\
 Firms and reports & 7 firms, 32 reports & disclosure units, not economic units \\
 Agreement-level records & 39 & same counterparty, subject and start date \\
-Entries with a fee-to-revenue ratio & 78 & annual entries stating both the fee and the revenue base \\
+Entries with a fee-to-revenue ratio & 78 & annual entries with a fee and a firm-year revenue denominator \\
 \bottomrule
 \end{tabular}
 \end{adjustbox}

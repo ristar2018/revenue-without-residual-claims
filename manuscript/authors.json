@@ -1,0 +1,91 @@
+{
+  "_note": "Front matter single source. build_tex_en.py and build_docx_en.py both read this file; edit here only.",
+  "corresponding_note": "Corresponding author.",
+  "affiliations": [
+    {
+      "label": "a",
+      "organization": "School of Foreign Languages, Henan Institute of Science and Technology",
+      "city": "Xinxiang",
+      "postcode": "453003",
+      "country": "China"
+    },
+    {
+      "label": "b",
+      "organization": "School of Music and Dance, Henan Institute of Science and Technology",
+      "city": "Xinxiang",
+      "postcode": "453003",
+      "country": "China"
+    },
+    {
+      "label": "c",
+      "organization": "School of Humanities and Law, Xinxiang Institute of Engineering",
+      "city": "Xinxiang",
+      "postcode": "453003",
+      "country": "China"
+    }
+  ],
+  "authors": [
+    {
+      "name": "Yuan Zhao",
+      "aff": "a",
+      "email": "zhaoyuan@hist.edu.cn",
+      "corresponding": true,
+      "credit": [
+        "Conceptualization",
+        "Methodology",
+        "Formal analysis",
+        "Writing \u2013 review & editing",
+        "Project administration"
+      ]
+    },
+    {
+      "name": "Yingtao Ji",
+      "aff": "b",
+      "email": "jiyingtao@hist.edu.cn",
+      "corresponding": false,
+      "credit": [
+        "Data curation",
+        "Formal analysis",
+        "Investigation",
+        "Methodology",
+        "Writing \u2013 original draft",
+        "Writing \u2013 review & editing",
+        "Funding acquisition"
+      ]
+    },
+    {
+      "name": "Mengjie Hu",
+      "aff": "b",
+      "email": "hmj@hist.edu.cn",
+      "corresponding": false,
+      "credit": [
+        "Software",
+        "Methodology",
+        "Formal analysis",
+        "Investigation"
+      ]
+    },
+    {
+      "name": "Songmei Liu",
+      "aff": "c",
+      "email": "liusongmei@xxgc.edu.cn",
+      "corresponding": false,
+      "credit": [
+        "Validation",
+        "Writing \u2013 review & editing",
+        "Supervision"
+      ]
+    },
+    {
+      "name": "Chenyu Yang",
+      "aff": "b",
+      "email": "yangcy@hist.edu.cn",
+      "corresponding": false,
+      "credit": [
+        "Data curation",
+        "Investigation",
+        "Validation"
+      ]
+    }
+  ]
+}

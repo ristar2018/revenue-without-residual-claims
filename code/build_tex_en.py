@@ -197,22 +197,44 @@ def md_table(rows):
     return "".join(spec), head, body
 
 
-def gen_table(num, caption, spec, head, body, notes, header_map=None, size="footnotesize"):
+def _tabular(spec, head, body, header_map=None):
     head = [cell(h) for h in head]
     if header_map:
         head = [header_map.get(i, h) for i, h in enumerate(head)]
+    lines = ["\\begin{adjustbox}{max width=\\textwidth}",
+             "\\begin{tabular}{@{}%s@{}}" % spec,
+             "\\toprule", " & ".join(head) + " \\\\", "\\midrule"]
+    for r in body:
+        lines.append(" & ".join(cell(c) for c in r) + " \\\\")
+    lines += ["\\bottomrule", "\\end{tabular}", "\\end{adjustbox}"]
+    return "\n".join(lines)
+
+
+def split_blocks(tbl):
+    """Split collected table lines on blank markers into independent tables."""
+    blocks, cur = [], []
+    for l in tbl:
+        if l.strip().startswith("|"):
+            cur.append(l)
+        elif cur:
+            blocks.append(cur)
+            cur = []
+    if cur:
+        blocks.append(cur)
+    return blocks
+
+
+def gen_table(num, caption, spec, head, body, notes, header_map=None, size="footnotesize",
+              extra_blocks=None):
     lines = ["\\begin{table}[!htbp]", "\\centering"]
     if str(num).upper().startswith("A"):
         lines.append("\\renewcommand{\\thetable}{%s}" % num)
     lines += ["\\caption{%s}\\label{tab:%s}" % (inline(caption), num),
-              "\\begin{minipage}{\\textwidth}", "\\centering", "\\%s" % size,
-              "\\begin{adjustbox}{max width=\\textwidth}",
-              "\\begin{tabular}{@{}%s@{}}" % spec,
-              "\\toprule", " & ".join(head) + " \\\\", "\\midrule"]
-    for r in body:
-        lines.append(" & ".join(cell(c) for c in r) + " \\\\")
-    lines += ["\\bottomrule", "\\end{tabular}", "\\end{adjustbox}",
-              "\\par\\medskip", "\\raggedright",
+              "\\begin{minipage}{\\textwidth}", "\\centering", "\\%s" % size]
+    lines.append(_tabular(spec, head, body, header_map))
+    for s2, h2, b2 in (extra_blocks or []):
+        lines += ["\\par\\medskip", _tabular(s2, h2, b2)]
+    lines += ["\\par\\medskip", "\\raggedright",
               "\\noindent\\textit{Notes.} %s" % inline(notes),
               "\\end{minipage}", "\\end{table}"]
     return "\n".join(lines)
@@ -310,6 +332,8 @@ def tables_blocks():
         tbl = []
         for l in lines:
             if l.startswith("**Table") or re.match(r"^\*\*Panel", l):
+                if tbl and tbl[-1] != "":
+                    tbl.append("")
                 if l.startswith("**Table") and not cap:
                     cap = re.sub(r"^\*\*Table[^.]*\.\*\*\s*", "", l).strip()
                 continue
@@ -318,6 +342,8 @@ def tables_blocks():
                 continue
             if l.strip().startswith("|"):
                 tbl.append(l)
+            elif tbl and tbl[-1] != "":
+                tbl.append("")
         if not cap or not tbl:
             continue
         if title.startswith("Table 4"):
@@ -326,10 +352,15 @@ def tables_blocks():
         if title.startswith("Table 5"):
             out["5"] = T5
             continue
-        # group table rows into consecutive blocks (Table A2 has one)
-        spec, head, body = md_table(tbl)
+        # group table rows into consecutive blocks (Table A3 has two panels)
+        blocks = split_blocks(tbl)
+        spec, head, body = md_table(blocks[0])
+        extras = []
+        for b in blocks[1:]:
+            s2, h2, b2 = md_table(b)
+            extras.append((s2, h2, b2))
         num = re.sub(r"^(Appendix\s+)?Table\s+", "", title)
-        blk = gen_table(num, cap, spec, head, body, notes)
+        blk = gen_table(num, cap, spec, head, body, notes, extra_blocks=extras)
         if str(num).upper().startswith("A"):
             out_app.append(blk)
         else:

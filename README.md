@@ -38,7 +38,7 @@ data/        derived panels and result tables (CSV)
 code/        collection, parsing, estimation and figure scripts
 docs/        coding manual, clause inventory, screening log, robustness
 figures/     camera-ready figures used in the manuscript
-manuscript/  section sources, LaTeX, PDF (v1.6)
+manuscript/  section sources, front-matter metadata, LaTeX, PDF (v1.6)
 ```
 
 The underlying annual and semi-annual reports are public filings distributed by

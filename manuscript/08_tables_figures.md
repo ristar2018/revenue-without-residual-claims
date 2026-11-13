@@ -145,23 +145,39 @@
 
 **Table A3.** Coding manual for contract clauses.
 
-| Field | Definition | Values |
-|---|---|---|
-| Record | One disclosure entry for one counterparty and one subject in one report | — |
-| Firm | Six-digit exchange code of the disclosing listed firm | 24 codes |
-| Report | Reporting year and reporting period | annual; semi-annual |
-| Channel | Location of the clause in the report | notes table; related-party main text |
-| Counterparty | Principal that grants the revenue right | government; scenic-area authority; state platform; other |
-| Operator | Entity that receives the fee | listed firm; subsidiary |
-| Subject | Object of the arrangement | scenic area; hotel; travel agency; port; other asset; equity |
-| Fee basis | How the fee is determined | fixed; cost-based; revenue-based; stepwise; progressive; not disclosed |
-| Fee amount | Amount recognised in the reporting period, RMB | numeric |
-| Term | Disclosed start and end dates, and length in years | date; years |
-| Termination | Whether an end date is disclosed | yes; no |
-| Sharing | Whether the fee is linked to revenue or profit by a formula | yes; no |
-| Agreement | Record joining entries that share counterparty, subject and start date | — |
+*Panel A. Fields recorded in `data/contract_terms_v4.csv` (99 rows).*
 
-*Notes.* Each clause was read in the original report. Ambiguities were resolved by re-reading the full contract description and the surrounding note rather than by interpreting an isolated table entry. Coding was carried out by a single coder, so no inter-coder reliability statistic is available; the coding manual is reported here so that the classification can be reproduced or challenged. A fee basis recorded as not disclosed means that the note states the existence of an arrangement without stating how the fee is calculated.
+| Column | Definition | Values or form |
+|---|---|---|
+| code | Six-digit exchange code of the disclosing listed firm | 7 codes |
+| year | Reporting year | 2016-2024 |
+| kind | Report type | A (annual, 78 rows); H1 (semi-annual, 21 rows) |
+| page | Page on which the entry appears in the layout text | integer |
+| rec | Order of the entry within that page | 1-5 |
+| channel | Location of the clause in the report | notes table (94); related-party main text (5) |
+| counterparty | Principal that grants the revenue right | firm name, verbatim as disclosed |
+| operator | Entity that receives the fee | firm name, verbatim; entries naming the disclosing firm itself are kept as disclosed |
+| scope | Subject of the arrangement, standardised | operating-rights entrustment (33); hotel property (26); other asset entrustment (21); travel agency (13); equity entrustment (1); named scenic area (5) |
+| scope_raw | Subject as worded in the report | verbatim |
+| start_date | Start of the term as disclosed | YYYY-MM-DD |
+| end_date | End of the term as disclosed | YYYY-MM-DD; empty in 41 of 99 rows, meaning no end date is disclosed |
+| pricing | Fee basis as worded in the report | verbatim excerpt |
+| amount_yuan | Fee recognised in the reporting period, RMB | numeric |
+| nature | Sector of the subject | other (54); hotel (26); travel agency (13); scenic area (5); port (1) |
+| pct_same_type | Share of same-type transactions, where the report states it | percent; stated for 5 of 99 rows |
+| parse_flag | Record of any cleaning applied during extraction | free text |
+| note | Coder note | free text |
+
+*Panel B. Analytic codes read from the verbatim fields.* These are readings of `pricing` and `end_date` rather than separate columns, so that the recorded text and the code can always be checked against each other.
+
+| Code | Read from | Rule | Values |
+|---|---|---|---|
+| Fee basis class | pricing | fixed sum; cost-based; revenue- or profit-sharing formula; stepwise or progressive schedule; not disclosed | 5 classes |
+| Sharing | pricing | yes when the fee is a stated function of the counterparty's revenue or profit, no otherwise | yes; no |
+| Termination disclosed | end_date | yes when an end date is stated, no otherwise | yes; no |
+| Agreement | counterparty + scope + start_date | entries sharing all three are treated as one agreement | 39 agreements from 99 entries |
+
+*Notes.* Chinese values are retained in the data files because they are the wording of the source notes; the replication package README lists their English equivalents, and the values printed in Panel A are those equivalents. Each clause was read in the original report. Ambiguities were resolved by re-reading the full contract description and the surrounding note rather than by interpreting an isolated table entry. Coding was carried out by a single coder, so no inter-coder reliability statistic is available; the manual is reported here so that the classification can be reproduced or challenged. A fee basis recorded as not disclosed means that the note states the existence of an arrangement without stating how the fee is calculated.
 
 ## Appendix Table A4
 
@@ -176,7 +192,7 @@
 | Clause entries extracted | 99 | 94 notes-table entries and 5 related-party main-text entries |
 | Firms and reports | 7 firms, 32 reports | disclosure units, not economic units |
 | Agreement-level records | 39 | same counterparty, subject and start date |
-| Entries with a fee-to-revenue ratio | 78 | annual entries stating both the fee and the revenue base |
+| Entries with a fee-to-revenue ratio | 78 | annual entries with a fee and a firm-year revenue denominator |
 
 *Notes.* The keyword search was run on the layout text of the 311 reports. A page-level hit is a page containing at least one search term; it is not a clause. Entries were retained only where the report states a fee amount or an explicit fee basis and identifies the counterparty and the subject. Related-party transactions that disclose a balance without a fee, and franchise arrangements that transfer a brand rather than a revenue right, were excluded. The yield from 1,180 page hits to 99 clause entries reflects this screening rather than a sampling design.
 
